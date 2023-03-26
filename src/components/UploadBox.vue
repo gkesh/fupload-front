@@ -2,7 +2,9 @@
   <div class="upload-box">
     <span class="serial">{{ index }}</span>
     <input type="file" :name="'file-' + index" />
-    <button type="button" @click="emitRemove(index)">Remove</button>
+    <button type="button" class="error" @click="emitRemove(index)">
+      Remove
+    </button>
   </div>
 </template>
 
@@ -45,11 +47,6 @@ export default defineComponent({
     font-weight: 900;
     background: var(--backgroundPrimary);
     color: var(--primary);
-  }
-
-  button {
-    background: var(--error);
-    color: white;
   }
 }
 </style>
