@@ -35,14 +35,17 @@
       <div v-if="historyStatus === 0">Loading...</div>
       <div v-else-if="historyStatus < 0">Failed to load history!</div>
       <div v-else>
-        <HistoryBox
-          v-for="(media, i) in history"
-          :title="media.title"
-          :extension="media.extension"
-          :date-uploaded="media.dateUploaded"
-          :filename="media.filename"
-          :key="'media' + i"
-        />
+        <div v-if="history.length > 0">
+          <HistoryBox
+            v-for="(media, i) in history"
+            :title="media.title"
+            :extension="media.extension"
+            :date-uploaded="media.dateUploaded"
+            :filename="media.filename"
+            :key="'media' + i"
+          />
+        </div>
+        <div v-else>No files uploaded yet!</div>
       </div>
     </section>
     <div class="errors">
@@ -134,12 +137,13 @@ export default defineComponent({
       }).then((res) => res.json());
 
       console.log(data);
+
+      clearFiles();
+      location.reload();
     };
 
     // Loading history data once mounted
     onMounted(async () => {
-      console.log("Here");
-
       const data = await fetch(`${server}/all`, {
         method: "GET",
         mode: "cors",
@@ -208,7 +212,7 @@ main {
   padding: 2rem;
 
   section {
-    width: 600px;
+    width: 800px;
     max-width: 100%;
     margin-bottom: 2rem;
     border-radius: 24px;

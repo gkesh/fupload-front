@@ -62,25 +62,23 @@ export default defineComponent({
 
           fr.onload = () => {
             const img: HTMLImageElement = document.createElement("img");
-
-            img.addEventListener("loadedmetadata", () => {
-              const timeout = img.height === 0 ? 500 : 0;
-
-              setTimeout(() => {
-                const height = img.height;
-
-                // Assuming resolution by vertical pixel count
-                if (height < 1080) {
-                  emitError(
-                    inputElement,
-                    `Image ${file.name} size less than 1080px`
-                  );
-                  return;
-                }
-              }, timeout);
-            });
-
             img.src = fr.result as string;
+
+            const timeout = img.height === 0 ? 1000 : 0;
+
+            setTimeout(() => {
+              const height = img.height;
+              console.log(height);
+
+              // Assuming resolution by vertical pixel count
+              if (height < 1080) {
+                emitError(
+                  inputElement,
+                  `Image ${file.name} size less than 1080px`
+                );
+                return;
+              }
+            }, timeout);
           };
         } else if (fileType === "mp3") {
           // Validating audio
@@ -88,7 +86,7 @@ export default defineComponent({
             const audio = new Audio();
             audio.addEventListener("loadedmetadata", () => {
               // Introducing delay in load if processing is slow
-              const timeout = audio.duration === Infinity ? 200 : 0;
+              const timeout = audio.duration === Infinity ? 1000 : 0;
               setTimeout(() => {
                 if (audio.duration / 60 > 1) {
                   emitError(
@@ -109,7 +107,7 @@ export default defineComponent({
             video.preload = "metadata";
 
             video.addEventListener("loadedmetadata", () => {
-              const timeout = video.duration === Infinity ? 500 : 0;
+              const timeout = video.duration === Infinity ? 1000 : 0;
               setTimeout(() => {
                 console.log(video.videoHeight);
                 // Assuming resolution by vertical pixel count
@@ -167,6 +165,15 @@ export default defineComponent({
     font-weight: 900;
     background: var(--backgroundPrimary);
     color: var(--primary);
+    flex: 1;
+  }
+
+  input {
+    flex: 6;
+  }
+
+  button {
+    flex: 1;
   }
 }
 </style>
