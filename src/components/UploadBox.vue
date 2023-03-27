@@ -68,7 +68,6 @@ export default defineComponent({
 
             setTimeout(() => {
               const height = img.height;
-              console.log(height);
 
               // Assuming resolution by vertical pixel count
               if (height < 1080) {

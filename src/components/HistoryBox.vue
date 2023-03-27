@@ -29,7 +29,7 @@ export default defineComponent({
       type: String,
     },
     dateUploaded: {
-      type: Date,
+      type: String,
     },
   },
 });

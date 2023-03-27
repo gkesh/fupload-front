@@ -40,7 +40,7 @@
             v-for="(media, i) in history"
             :title="media.title"
             :extension="media.extension"
-            :date-uploaded="media.dateUploaded"
+            :date-uploaded="media.dateUploaded.toLocaleString()"
             :filename="media.filename"
             :key="'media' + i"
           />
@@ -58,7 +58,7 @@
 import { defineComponent, onMounted, ref, Ref } from "vue";
 import UploadBox from "@/components/UploadBox.vue";
 import HistoryBox from "@/components/HistoryBox.vue";
-import { Media } from "@/models/file";
+import { Media, Extension } from "@/models/file";
 
 export default defineComponent({
   name: "App",
@@ -130,16 +130,49 @@ export default defineComponent({
         return;
       }
 
-      const data = await fetch(`${server}/upload`, {
+      interface UploadResponse {
+        errors?: string[];
+        rejected?: { [fileId: string]: string };
+        uploaded?: { [fileId: string]: string };
+      }
+
+      const data: UploadResponse = await fetch(`${server}/upload`, {
         method: "POST",
         mode: "cors",
         body: formData,
       }).then((res) => res.json());
 
-      console.log(data);
+      if (data) {
+        if (data.rejected && Object.keys(data.rejected).length > 0) {
+          Object.entries(data.rejected).forEach(
+            ([file, message]: [string, string]) => {
+              setError(`File ${file} rejected: ${message}`);
+            }
+          );
+        }
+
+        if (data.uploaded && Object.keys(data.uploaded).length > 0) {
+          Object.entries(data.uploaded).forEach(
+            ([file, filename]: [string, string]) => {
+              const [timestamp, ...uploadName] = filename.split("_");
+              const extension = file.split(".").splice(-1)[0] as Extension;
+
+              // Skips invalid extensions and files that dont match naming schemes
+              const uploadedFile: Media = {
+                title: uploadName.join("_"),
+                filename,
+                extension,
+                dateUploaded: new Date(parseInt(timestamp, 10)),
+              };
+
+              // Pushing to history
+              history.value.push(uploadedFile);
+            }
+          );
+        }
+      }
 
       clearFiles();
-      location.reload();
     };
 
     // Loading history data once mounted
