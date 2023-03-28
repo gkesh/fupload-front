@@ -156,6 +156,10 @@ export default defineComponent({
   gap: 12px;
   padding: 20px;
 
+  &:not(:first-of-type) {
+    border-top: 1px solid var(--border);
+  }
+
   .serial {
     width: 50px;
     padding: 12px;

@@ -221,7 +221,7 @@ export default defineComponent({
   --backgroundLight: #f2f2f2;
   --backgroundMuted: #ebe5ff;
 
-  --border: #e3e3e3;
+  --border: #e2e2e2;
   --text: #2c3e50;
 }
 
@@ -258,10 +258,6 @@ main {
 
     &.upload {
       background: var(--backgroundLight);
-
-      & > .upload-box:not(:first-of-type) {
-        border-top: 1px solid var(--border);
-      }
     }
 
     &.history {
