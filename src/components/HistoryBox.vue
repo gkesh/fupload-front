@@ -126,6 +126,7 @@ export default defineComponent({
       flex: 4;
       font-size: 0.9em;
       text-align: right;
+      padding: 0 12px;
     }
   }
 }
