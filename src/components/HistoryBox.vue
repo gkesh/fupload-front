@@ -11,6 +11,9 @@
       <div class="history-date">
         {{ dateUploaded }}
       </div>
+      <div class="history-download">
+        <button class="primary-dark" @click="download(url, title)">💾</button>
+      </div>
     </div>
     <div v-if="preview" class="preview">
       <PreviewBox :extension="extension" :url="url" />
@@ -27,6 +30,7 @@ export default defineComponent({
   components: {
     PreviewBox,
   },
+  emits: ["on-error"],
   props: {
     title: {
       type: String,
@@ -45,13 +49,29 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(_, { emit }) {
     const preview: Ref<boolean> = ref(false);
     const togglePreview = () => {
       preview.value = !preview.value;
     };
 
+    const download = (url: string, filename: string) => {
+      fetch(url)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const resourceElement: HTMLAnchorElement =
+            document.createElement("a");
+          resourceElement.download = filename;
+          resourceElement.href = URL.createObjectURL(blob);
+          resourceElement.click();
+        })
+        .catch((error) => {
+          emit("on-error", `Filed to download file: ${error}`);
+        });
+    };
+
     return {
+      download,
       preview,
       togglePreview,
     };
@@ -104,6 +124,7 @@ export default defineComponent({
 
     .history-date {
       flex: 4;
+      font-size: 0.9em;
     }
   }
 }

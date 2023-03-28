@@ -43,6 +43,7 @@
             :date-uploaded="new Date(media.dateUploaded).toLocaleString()"
             :url="server + '/uploads/' + media.filename"
             :key="'media' + i"
+            @on-error="setError"
           />
         </div>
         <div v-else>No files uploaded yet!</div>
@@ -67,7 +68,7 @@ export default defineComponent({
     HistoryBox,
   },
   setup() {
-    const server = "http://127.0.0.1:8081";
+    const server = "http://localhost:8081";
     const fileCount: Ref<number> = ref(0);
     const files: Ref<number[]> = ref([]);
 
@@ -246,7 +247,7 @@ main {
   padding: 2rem;
 
   section {
-    width: 800px;
+    width: 960px;
     max-width: 100%;
     margin-bottom: 2rem;
     border-radius: 24px;
@@ -301,6 +302,11 @@ main {
     &.primary {
       background: var(--backgroundPrimary);
       color: var(--primary);
+    }
+
+    &.primary-dark {
+      background: var(--primary);
+      color: white;
     }
 
     &.error {
