@@ -100,6 +100,7 @@ export default defineComponent({
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
 
     .history-preview {
       flex: 1;
@@ -109,7 +110,6 @@ export default defineComponent({
       color: var(--primary);
       font-size: 1.05em;
       text-align: left;
-      padding: 0 20px;
       flex: 8;
 
       span {
@@ -126,7 +126,6 @@ export default defineComponent({
       flex: 4;
       font-size: 0.9em;
       text-align: right;
-      padding: 0 12px;
     }
   }
 }
