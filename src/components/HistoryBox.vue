@@ -125,6 +125,7 @@ export default defineComponent({
     .history-date {
       flex: 4;
       font-size: 0.9em;
+      text-align: right;
     }
   }
 }
