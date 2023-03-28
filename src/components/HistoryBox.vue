@@ -1,6 +1,9 @@
 <template>
   <div class="history-box">
     <div class="history-blade">
+      <div class="history-preview">
+        <button class="primary" @click="togglePreview">👀</button>
+      </div>
       <div class="history-title">
         {{ title }}
         <span>{{ extension }}</span>
@@ -9,28 +12,49 @@
         {{ dateUploaded }}
       </div>
     </div>
-    <div class="preview"></div>
+    <div v-if="preview" class="preview">
+      <PreviewBox :extension="extension" :url="url" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, Ref, ref } from "vue";
+import PreviewBox from "@/components/PreviewBox.vue";
 
 export default defineComponent({
   name: "HistoryBox",
+  components: {
+    PreviewBox,
+  },
   props: {
     title: {
       type: String,
+      required: true,
     },
-    filename: {
+    url: {
       type: String,
+      required: true,
     },
     extension: {
       type: String,
+      required: true,
     },
     dateUploaded: {
       type: String,
+      required: true,
     },
+  },
+  setup() {
+    const preview: Ref<boolean> = ref(false);
+    const togglePreview = () => {
+      preview.value = !preview.value;
+    };
+
+    return {
+      preview,
+      togglePreview,
+    };
   },
 });
 </script>
@@ -55,10 +79,18 @@ export default defineComponent({
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+
+    .history-preview {
+      flex: 1;
+    }
 
     .history-title {
       color: var(--primary);
       font-size: 1.05em;
+      text-align: left;
+      padding: 0 20px;
+      flex: 8;
 
       span {
         margin-left: 12px;
@@ -68,6 +100,10 @@ export default defineComponent({
         background: var(--primary);
         color: white;
       }
+    }
+
+    .history-date {
+      flex: 4;
     }
   }
 }

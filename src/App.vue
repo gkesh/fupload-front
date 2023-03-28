@@ -40,8 +40,8 @@
             v-for="(media, i) in history"
             :title="media.title"
             :extension="media.extension"
-            :date-uploaded="media.dateUploaded.toLocaleString()"
-            :filename="media.filename"
+            :date-uploaded="new Date(media.dateUploaded).toLocaleString()"
+            :url="server + '/uploads/' + media.filename"
             :key="'media' + i"
           />
         </div>
@@ -153,9 +153,9 @@ export default defineComponent({
 
         if (data.uploaded && Object.keys(data.uploaded).length > 0) {
           Object.entries(data.uploaded).forEach(
-            ([file, filename]: [string, string]) => {
+            ([, filename]: [string, string]) => {
               const [timestamp, ...uploadName] = filename.split("_");
-              const extension = file.split(".").splice(-1)[0] as Extension;
+              const extension = filename.split(".").splice(-1)[0] as Extension;
 
               // Skips invalid extensions and files that dont match naming schemes
               const uploadedFile: Media = {
@@ -196,6 +196,7 @@ export default defineComponent({
     return {
       errors,
       files,
+      server,
       fileCount,
       clearFiles,
       deleteFile,

@@ -108,7 +108,6 @@ export default defineComponent({
             video.addEventListener("loadedmetadata", () => {
               const timeout = video.duration === Infinity ? 1000 : 0;
               setTimeout(() => {
-                console.log(video.videoHeight);
                 // Assuming resolution by vertical pixel count
                 if (video.videoHeight < 720) {
                   emitError(
